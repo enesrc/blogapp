@@ -17,6 +17,11 @@
                     <%= title %>
                 </h1>
 
+                <% if (blogs.length == 0) { %>
+                    <%- include("../partials/no-products") %> 
+                <% } %>
+
+
                 <% blogs.forEach(blog => { %>
                     <%- include("../partials/blog-card", blog) %> 
                 <% }) %>
