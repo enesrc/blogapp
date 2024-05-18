@@ -10,26 +10,35 @@
     <div class="container mt-3">
         <div class="row">
             <div class="col-md-12 mt-3">
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     <input hidden name="blogid" value="<%= blog.blogid %>">
+                    <input type="hidden" name="resim" value="<%= blog.resim %>">
                     <div class="row mb-3">
                         <label for="baslik" class="col-sm-2 col-form-label">Başlık</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="baslik" name="baslik" value="<%= blog.baslik %>">
                         </div>
                     </div>
+                    
+                    <div class="row mb-3">
+                        <label for="altbaslik" class="col-sm-2 col-form-label">Altbaşlık</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="altbaslik" name="altbaslik" value="<%= blog.altbaslik %>">
+                        </div>
+                    </div>
 
                     <div class="row mb-3">
                         <label for="aciklama" class="col-sm-2 col-form-label">Açıklama</label>
                         <div class="col-sm-8">
-                            <textarea name="aciklama" class="form-control" row="10"><%= blog.aciklama %></textarea>
+                            <textarea id="editor" name="aciklama" class="form-control" rows="7"><%= blog.aciklama %></textarea>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label for="resim" class="col-sm-2 col-form-label">Resim</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="resim" name="resim" value="<%= blog.resim %>">
+                        <div class="col-sm-8 d-flex justify-content-inline">
+                            <img src="/static/images/<%= blog.resim %>" alt="" width="120px">
+                            <input type="file" class="form-control" id="resim" name="resim">
                         </div>
                     </div>
 
@@ -78,10 +87,19 @@
                         </div>
                     </div>
 
-                </form>
+                </form>               
             </div>
         </div>
     </div>
 
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+
+    <script>
+        ClassicEditor
+            .create( document.querySelector( '#editor' ) )
+            .catch( error => {
+                console.error( error );
+            } );
+    </script> 
 </body>
 </html>

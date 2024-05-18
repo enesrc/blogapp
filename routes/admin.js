@@ -1,8 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const fs = require('fs');
 
 const db = require("../data/db");
+const imageUpload = require('../helpers/image-upload');
 
+/*
+ CATEGORY 
+*/
 // get the category-delete page
 router.get("/category/delete/:categoryid", async (req, res) => {
     const kategoriid = req.params.categoryid;
@@ -87,7 +92,7 @@ router.post("/category/:categoryid", async (req, res) => {
     try {
         await db.execute("UPDATE category SET categoryname=? WHERE categoryid=?", [kategoriadi, kategoriid]);
         
-        res.redirect("/admin/categories?action=edit");
+        res.redirect("/admin/categories?action=edit&id=" + kategoriid);
     }
     catch (err) {
         console.log(err);
@@ -102,14 +107,18 @@ router.get("/categories", async (req, res) => {
         res.render("admin/category-list", {
             title: "Kategoriler",
             categories: categories,
-            action: req.query.action
-        })
+            action: req.query.action,
+            categoryid: req.query.id
+        });
     }
     catch (err) {
-        console.log(err)
+        console.log(err);
     }
 });
 
+/*
+ BLOG 
+*/
 // get the blog-delete page
 router.get("/blog/delete/:blogid", async (req, res) => {
     const blogid = req.params.blogid;
@@ -152,16 +161,18 @@ router.get("/blog/create", async (req, res) => {
 });
 
 // create a new blog
-router.post("/blog/create", async (req, res) => {
+router.post("/blog/create", imageUpload.upload.single("resim"), async (req, res) => {
     const baslik = req.body.baslik;
+    const altbaslik = req.body.altbaslik;
     const aciklama = req.body.aciklama;
-    const resim = req.body.resim;
+    const resim = req.file.filename;
     const kategori = req.body.kategori;
     const anasayfa = req.body.anasayfa == 'on' ? 1:0;
     const onay = req.body.onay == 'on' ? 1:0;
 
     try{
-        await db.execute("INSERT INTO blog (baslik, aciklama, resim, anasayfa, onay, categoryid) VALUES (?, ?, ?, ?, ?, ?)", [baslik, aciklama, resim, anasayfa, onay, kategori]);
+        console.log(resim);
+        await db.execute("INSERT INTO blog (baslik, aciklama, altbaslik, resim, anasayfa, onay, categoryid) VALUES (?, ?, ?, ?, ?, ?, ?)", [baslik, aciklama, altbaslik, resim, anasayfa, onay, kategori]);
         res.redirect("/admin/blogs?action=create")
     }
     catch (err) {
@@ -192,17 +203,27 @@ router.get("/blogs/:blogid", async (req, res) => {
 });
 
 // update a blog
-router.post("/blogs/:blogid", async (req, res) => {
+router.post("/blogs/:blogid", imageUpload.upload.single("resim"), async (req, res) => {
     const blogid = req.body.blogid;
     const baslik = req.body.baslik;
+    const altbaslik = req.body.altbaslik;
     const aciklama = req.body.aciklama;
-    const resim = req.body.resim;
+
+    let resim = req.body.resim;
+    if(req.file){
+        resim = req.file.filename;
+
+        fs.unlink("./public/images/" + req.body.resim, err => {
+            console.log(err);
+        })
+    }
+
     const anasayfa = req.body.anasayfa == "on" ? 1 : 0;
     const onay = req.body.onay == "on" ? 1 : 0;
     const kategori = req.body.kategori;
     try {
-        await db.execute("UPDATE blog SET baslik=?, aciklama=?, resim=?, anasayfa=?, onay=?, categoryid=? WHERE blogid=?", [baslik, aciklama, resim, anasayfa, onay, kategori, blogid]);
-        res.redirect("/admin/blogs?action=edit");
+        await db.execute("UPDATE blog SET baslik=?, aciklama=?, altbaslik=?, resim=?, anasayfa=?, onay=?, categoryid=? WHERE blogid=?", [baslik, aciklama, altbaslik, resim, anasayfa, onay, kategori, blogid]);
+        res.redirect("/admin/blogs?action=edit&id=" + blogid);
     } 
     catch (err) {
         console.log(err)
@@ -217,7 +238,8 @@ router.get("/blogs", async (req, res) => {
         res.render("admin/blog-list", {
             title: "Blog List",
             blogs: blogs,
-            action: req.query.action
+            action: req.query.action,
+            blogid: req.query.id
         })
     } catch (err) { console.log(err) }
 });
