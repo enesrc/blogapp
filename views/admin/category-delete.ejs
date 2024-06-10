@@ -12,10 +12,10 @@
             <div class="col-md-12 mt-3">
                 <div class="alert alert-secondary">
                     <p class="mb-3">
-                        <b><%= kategori.categoryname %> </b><br> isimli kategoriyi silmek istediğine emin misin?
+                        <b><%= kategori.dataValues.name %> </b><br> isimli kategoriyi silmek istediğine emin misin?
                     </p>
                     <form method="post">
-                        <input hidden name="kategoriid" value="<%= kategori.categoryid %>">
+                        <input hidden name="kategoriid" value="<%= kategori.dataValues.id %>">
                         <button class="btn btn-danger" type="submit">Evet</button>
                         <a class="btn btn-primary" href="/admin/categories">Vazgeç</a>
                     </form>

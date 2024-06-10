@@ -15,7 +15,7 @@
                         <b><%= blog.baslik %> </b><br> isimli bloğu silmek istediğine emin misin?
                     </p>
                     <form method="post">
-                        <input hidden name="blogid" value="<%= blog.blogid %>">
+                        <input hidden name="blogid" value="<%= blog.id %>">
                         <button class="btn btn-danger" type="submit">Evet</button>
                         <a class="btn btn-primary" href="/admin/blogs">Vazgeç</a>
                     </form>

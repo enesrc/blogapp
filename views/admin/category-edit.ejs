@@ -10,22 +10,53 @@
     <div class="container mt-3">
         <div class="row">
             <div class="col-md-12 mt-3">
-                <form method="post">
+                <div class="card card-body">
+                    <form method="post">
                     
-                    <div class="row mb-3">
-                        <label for="kategoriadi" class="col-sm-2 col-form-label">Kategori Adı</label>
-                        <div class="col-sm-8">
-                            <input type="hidden" name="kategoriid" value="<%= kategori.categoryid %>">
-                            <input type="text" class="form-control" id="kategoriadi" name="kategoriadi" value="<%= kategori.categoryname %>">
+                        <div class="row mb-3">
+                            <label for="kategoriadi" class="col-sm-2 col-form-label">Kategori Adı</label>
+                            <div class="col-sm-8">
+                                <input type="hidden" name="kategoriid" value="<%= kategori.id %>">
+                                <input type="text" class="form-control" id="kategoriadi" name="kategoriadi" value="<%= kategori.name %>">
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-8 offset-sm-2">
-                           <button type="submit" class="btn btn-primary">Kaydet</button>
+                        <div class="row mb-3">
+                            <div class="col-sm-8 offset-sm-2">
+                               <button type="submit" class="btn btn-primary">Kaydet</button>
+                            </div>
                         </div>
-                    </div>
+    
+                    </form>
+                </div>
 
-                </form>
+                <h6>Blog adedi: <%= blogCount %></h6>
+                
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px;">Id</th>
+                            <th style="width: 150px;">Resim</th>
+                            <th>Başlık</th>
+                            <th style="width: 130px;">İşlemler</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                            <% blogs.forEach(blog => { %>
+                                <tr>
+                                    <td>#<%= blog.dataValues.id %></td>
+                                    <td>
+                                        <img src="/static/images/<%= blog.dataValues.resim %>" class="img-fluid" alt="">
+                                    </td>
+                                    <td><%= blog.baslik %></td>
+                                    <td>
+                                        <a class="btn btn-sm btn-primary " href="/admin/blogs/<%= blog.dataValues.id %>">Edit</a>
+                                        <a class="btn btn-sm btn-danger " href="/admin/blog/delete/<%= blog.dataValues.id %>">Delete</a>
+                                    </td>   
+                                </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
