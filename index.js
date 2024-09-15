@@ -6,7 +6,6 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 
 const path = require("path");
-                                     
 const userRoutes = require("./routes/user");
 const adminRoutes = require("./routes/admin");
 
@@ -14,30 +13,18 @@ app.use("/libs", express.static(path.join(__dirname, "node_modules")));
 app.use("/static", express.static(path.join(__dirname, "public")));
 
 app.use("/admin", adminRoutes);
-app.use(userRoutes);
+app.use(userRoutes); 
 
 const sequelize = require("./data/db");
 const dummyData = require("./data/dummy-data");
 const Category = require("./models/category");
 const Blog = require("./models/blog");
 
-// ilişkiler 
-// one to many
+Blog.belongsToMany(Category, { through: "blogCategories"});
+Category.belongsToMany(Blog, { through: "blogCategories"});
 
-Category.hasMany(Blog, {
-    foreignKey: {
-        name: "categoryId",
-        allowNull: false,
-        // defaultValue: 1
-    },
-    onDelete: "RESTRICT",
-    onUpdate: "RESTRICT"
-});
-Blog.belongsTo(Category);
-
-// uygulanması - sync
 (async () => {
-    await sequelize.sync( {alter: true} );
+    await sequelize.sync({ force: true });
     await dummyData();
 })();
 

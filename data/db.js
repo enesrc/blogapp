@@ -1,35 +1,25 @@
-const config = require("../config")
+const config = require("../config");
 
-const Sequelize = require('sequelize');
+const Sequelize = require("sequelize");
 
 const sequelize = new Sequelize(config.db.database, config.db.user, config.db.password, {
     dialect: "mysql",
-    host: config.db.host
+    host: config.db.host,
+    define: {
+        timestamps: false
+    }
 });
-
 
 async function connect() {
     try {
         await sequelize.authenticate();
-        console.log("Mysql server baglantisi yapildi");
-    } 
-    catch (err) {
-        console.log("Baglanti hatasi", err);
-    } 
+        console.log("mysql server bağlantısı yapıldı");
+    }
+    catch(err) {
+        console.log("bağlantı hatası ", err);
+    }
 }
 
-connect()
+connect();
 
 module.exports = sequelize;
-
-
-// let connection = mysql.createConnection(config.db)
-
-// connection.connect((err)=>{
-//     if(err)
-//         return console.log(err)
-
-//     console.log("mysql server bağlantisi yapildi.")
-// })
-
-// module.exports = connection.promise();

@@ -8,46 +8,51 @@
     <%- include("../partials/nav")  %> 
 
     <div class="container mt-3">
-        <div class="row">
+          <div class="row">
             <div class="col-md-12 mt-3">
-                <% if (action == "edit") { %>
+                <% if (action != "undefined" && action=="edit") { %>
                     <div class="alert alert-success">
-                        <%= categoryid %>. kategori güncellendi.
-                    </div>
-                <% } else if (action == "delete") { %>
-                    <div class="alert alert-danger">
-                        Kategori silindi.
-                    </div>
-                <% } else if (action == "create") { %>
-                    <div class="alert alert-success">
-                        Kategori eklendi.
+                        <%= categoryid %> id numaralı kategori Güncelledi.
                     </div>
                 <% } %>
-
+                <% if (action != "undefined" && action=="create") { %>
+                    <div class="alert alert-success">
+                        kategori Eklendi.
+                    </div>
+                <% } %>
+                <% if (action != "undefined" && action=="delete") { %>
+                    <div class="alert alert-success">
+                        kategori Silindi.
+                    </div>
+                <% } %>
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th style="width: 50px;">Id</th>
-                            <th>Adı</th>
-                            <th style="width: 130px;">İşlemler</th>
+                            <th style="width: 50px;">id</th>
+                            <th>name</th>
+                            <th style="width: 130px;"></th>
                         </tr>
                     </thead>
                     <tbody>
-                            <% categories.forEach(category => { %>
-                                <tr>
-                                    <td>#<%= category.dataValues.id %></td>
-                                    <td><%= category.dataValues.name %></td>
-                                    <td>
-                                        <a class="btn btn-sm btn-primary " href="/admin/category/<%= category.dataValues.id %>">Edit</a>
-                                        <a class="btn btn-sm btn-danger " href="/admin/category/delete/<%= category.dataValues.id %>">Delete</a>
-                                    </td>
-                                </tr>
-                            <% }) %>
+                        <% categories.forEach(category => { %>
+                            <tr>
+                                <td>#<%= category.dataValues.id %> </td>
+                                <td>
+                                    <%= category.dataValues.name %> 
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary" href="/admin/categories/<%= category.dataValues.id %>">edit</a>
+                                    <a class="btn btn-sm btn-danger" href="/admin/category/delete/<%= category.dataValues.id %>">delete</a>
+                                </td>
+                            </tr>
+                        <% }) %>
                     </tbody>
                 </table>
             </div>
-        </div>
+          </div>
     </div>
-
 </body>
 </html>
+
+
+

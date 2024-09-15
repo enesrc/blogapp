@@ -1,83 +1,70 @@
 const Blog = require("../models/blog");
 const Category = require("../models/category");
 
-const { Op } =  require("sequelize");
+const { Op } = require("sequelize");
 
-exports.blogs_by_category = async (req, res) => {
-    const id = req.params.categoryid;
 
-    try {        
-        const blogs = await Blog.findAll({
-            where:{
-                categoryId: id,
-                onay: true
+exports.blogs_details = async function(req, res) {
+    const slug = req.params.slug;
+    try {
+        const blog = await Blog.findOne({
+            where: {
+                url: slug
             },
             raw: true
         });
-        const categories = await Category.findAll({ raw: true });
-        const title = await Category.findByPk(id);
 
-        res.render("users/blogs" , {
-            title: title.dataValues.isim,
-            blogs: blogs,
-            categories: categories,
-            selectedCategoryId: id
-        })  
-
-    } catch (err) { console.log(err) }
-
-}
-
-exports.blog_details = async (req, res) => {
-    const id = req.params.blogid;
-
-    try {
-        const blog = await Blog.findByPk(id);
-
-        if(blog){
+        if(blog) {
             return res.render("users/blog-details", {
-                title: blog.dataValues.baslik,
-                blog: blog.dataValues
+                title: blog.baslik,
+                blog: blog
             });
         }
         res.redirect("/");
-    
-    } catch (err) { console.log(err) }
-    
+    }
+    catch(err) {
+        console.log(err);
+    }
 }
 
-exports.blog_list = async (req, res) => {
+exports.blog_list = async function(req, res) {
+    const size = 3;
+    const { page = 0 } = req.query;
+    const slug = req.params.slug;
 
     try {
-        const blogs = await Blog.findAll({
-            where:{
-                onay:{
-                    [Op.eq]: true
-                },
-            },
-            raw: true
-        })
+        const { rows, count } = await Blog.findAndCountAll({ 
+            where: { onay: {[Op.eq]: true } },
+            raw: true,
+            include: slug ? { model: Category, where: { url: slug } } : null,
+            limit: size,
+            offset: page * size 
+        });
+
         const categories = await Category.findAll({ raw: true });
 
         res.render("users/blogs", {
             title: "Tüm Kurslar",
-            blogs: blogs,
+            blogs: rows,
+            totalItems: count,
+            totalPages: Math.ceil(count / size),
+            currentPage: page,
             categories: categories,
-            selectedCategoryId: null
+            selectedCategory: slug
         })
-
-    } catch (err) { console.log(err) }
-
+    }
+    catch(err) {
+        console.log(err);
+    }
 }
 
-exports.index = async (req, res) => {
-
+exports.index = async function(req, res) {
     try {
         const blogs = await Blog.findAll({
             where: {
                 [Op.and]: [
-                    {onay: true},
-                    {anasayfa: true}
+                    { anasayfa: true },
+                    { onay: true }
                 ]
             },
             raw: true
@@ -88,9 +75,10 @@ exports.index = async (req, res) => {
             title: "Popüler Kurslar",
             blogs: blogs,
             categories: categories,
-            selectedCategoryId: null
+            selectedCategory: null
         })
-
-    } catch (err) { console.log(err) }
-
+    }
+    catch(err) {
+        console.log(err);
+    }
 }

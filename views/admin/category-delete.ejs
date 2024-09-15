@@ -9,20 +9,23 @@
 
     <div class="container mt-3">
         <div class="row">
-            <div class="col-md-12 mt-3">
-                <div class="alert alert-secondary">
-                    <p class="mb-3">
-                        <b><%= kategori.dataValues.name %> </b><br> isimli kategoriyi silmek istediğine emin misin?
-                    </p>
-                    <form method="post">
-                        <input hidden name="kategoriid" value="<%= kategori.dataValues.id %>">
-                        <button class="btn btn-danger" type="submit">Evet</button>
-                        <a class="btn btn-primary" href="/admin/categories">Vazgeç</a>
-                    </form>
-                </div>
+            <div class="col-md-12 mt-3 text-center">
+               <div class="alert alert-secondary">
+                <p class="mb-3">
+                    <b><%= category.name %> </b> <br> isimli category kaydınız silmek istiyor musunuz?
+                </p>
+                <form method="post">
+                    <input type="hidden" name="categoryid" value="<%= category.id %>">
+                    <button class="btn btn-danger" type="submit">Evet</button>
+                    <a href="/admin/categories" class="btn btn-primary">Vazgeç</a>
+                </form>
+               </div>
             </div>
         </div>
     </div>
-
+       
 </body>
 </html>
+
+
+

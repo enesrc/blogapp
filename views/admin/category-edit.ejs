@@ -12,54 +12,62 @@
             <div class="col-md-12 mt-3">
                 <div class="card card-body">
                     <form method="post">
-                    
+                        <input type="hidden" name="categoryid" value="<%= category.id %>">
                         <div class="row mb-3">
-                            <label for="kategoriadi" class="col-sm-2 col-form-label">Kategori Adı</label>
+                            <label for="baslik" class="col-sm-2 col-form-label">Name</label>
                             <div class="col-sm-8">
-                                <input type="hidden" name="kategoriid" value="<%= kategori.id %>">
-                                <input type="text" class="form-control" id="kategoriadi" name="kategoriadi" value="<%= kategori.name %>">
+                                <input type="text" class="form-control" id="name" name="name" value="<%= category.name %> ">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-sm-8 offset-sm-2">
-                               <button type="submit" class="btn btn-primary">Kaydet</button>
+                            <button type="submit" class="btn btn-primary">Kaydet</button>
                             </div>
                         </div>
-    
                     </form>
                 </div>
-
-                <h6>Blog adedi: <%= blogCount %></h6>
-                
+                <p>
+                    blog sayısı: <%= countBlog %> 
+                </p>
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th style="width: 50px;">Id</th>
-                            <th style="width: 150px;">Resim</th>
-                            <th>Başlık</th>
-                            <th style="width: 130px;">İşlemler</th>
+                            <th style="width: 50px;">id</th>
+                            <th style="width: 150px;">resim</th>
+                            <th>baslik</th>
+                            <th style="width: 200px;"></th>
                         </tr>
-
                     </thead>
                     <tbody>
-                            <% blogs.forEach(blog => { %>
-                                <tr>
-                                    <td>#<%= blog.dataValues.id %></td>
-                                    <td>
-                                        <img src="/static/images/<%= blog.dataValues.resim %>" class="img-fluid" alt="">
-                                    </td>
-                                    <td><%= blog.baslik %></td>
-                                    <td>
-                                        <a class="btn btn-sm btn-primary " href="/admin/blogs/<%= blog.dataValues.id %>">Edit</a>
-                                        <a class="btn btn-sm btn-danger " href="/admin/blog/delete/<%= blog.dataValues.id %>">Delete</a>
-                                    </td>   
-                                </tr>
-                            <% }) %>
+                        <% blogs.forEach(blog => { %>
+                            <tr>
+                                <td>#<%= blog.dataValues.id %> </td>
+                                <td>
+                                    <img src="/static/images/<%= blog.dataValues.resim %>" class="img-fluid" alt="">
+                                </td>
+                                <td>
+                                    <%= blog.dataValues.baslik %> 
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary" href="/admin/blogs/<%= blog.dataValues.id %>">edit</a>
+
+                                    <form style="display: inline-block;" action="/admin/categories/remove" method="post">
+                                        <input type="hidden" name="blogid" value="<%= blog.id %>">
+                                        <input type="hidden" name="categoryid" value="<%= category.id %>">
+                                        <button class="btn btn-sm btn-danger" type="submit">Kategoriden Çıkar</button>
+                                    </form>
+
+                                </td>
+                            </tr>
+                        <% }) %>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
+       
 </body>
 </html>
+
+
+

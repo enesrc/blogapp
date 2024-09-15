@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const userController = require('../controllers/user');
+const userController = require("../controllers/user");
 
-router.use("/blogs/category/:categoryid", userController.blogs_by_category);
+router.get("/blogs/category/:slug", userController.blog_list);
 
-router.use("/blogs/:blogid", userController.blog_details);
+router.get("/blogs/:slug", userController.blogs_details);
 
-router.use("/blogs", userController.blog_list);
+router.get("/blogs", userController.blog_list);
 
-router.use("/", userController.index);
-
+router.get("/", userController.index);
+ 
 module.exports = router;
