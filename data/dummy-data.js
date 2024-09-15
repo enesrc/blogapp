@@ -8,9 +8,9 @@ async function populate() {
     if(count == 0) { 
 
         const categories = await Category.bulkCreate([
-            { name: "Web Geliştirme",url: slugField("Web Geliştirme"), },
-            { name: "Mobil Geliştirme",url: slugField("Mobil Geliştirme"), },
-            { name: "Programlama",url: slugField("Programlama"), }
+            { name: "Web Geliştirme",url: slugField("Web Geliştirme") },
+            { name: "Mobil Geliştirme",url: slugField("Mobil Geliştirme") },
+            { name: "Programlama",url: slugField("Programlama") }
         ]);
 
         const blogs = await Blog.bulkCreate([
