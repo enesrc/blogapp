@@ -263,7 +263,7 @@ exports.post_category_edit = async function(req, res) {
     const name = req.body.name;
 
     try {
-        await Category.update({ name: name }, {
+        await Category.update({ name: name, url: slugField(name) }, {
             where: {
               id: categoryid
             }
